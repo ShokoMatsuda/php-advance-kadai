@@ -10,17 +10,17 @@ if (isset($_POST['submit'])) {
 
         // 動的に変わる値をプレースホルダに置き換えたINSERT文をあらかじめ用意する
         $sql_insert = '
-            INSERT INTO products (product_code, product_name, price, stock_quantity, vendor_code)
-            VALUES (:product_code, :product_name, :price, :stock_quantity, :vendor_code)
+            INSERT INTO books (book_code, book_name, price, stock_quantity, genre_code)
+            VALUES (:book_code, :book_name, :price, :stock_quantity, :genre_code)
             ';
             $stmt_insert = $pdo->prepare($sql_insert);
 
             // bindValue()メソッドを使って実際の値をプレースホルダにバインドする（割り当てる）
-            $stmt_insert->bindValue(':product_code', $_POST['product_code'], PDO::PARAM_INT);
-            $stmt_insert->bindValue(':product_name', $_POST['product_name'], PDO::PARAM_STR);
+            $stmt_insert->bindValue(':book_code', $_POST['book_code'], PDO::PARAM_INT);
+            $stmt_insert->bindValue(':book_name', $_POST['book_name'], PDO::PARAM_STR);
             $stmt_insert->bindValue(':price', $_POST['price'], PDO::PARAM_INT);
             $stmt_insert->bindValue(':stock_quantity', $_POST['stock_quantity'], PDO::PARAM_INT);
-            $stmt_insert->bindValue(':vendor_code', $_POST['vendor_code'], PDO::PARAM_INT);
+            $stmt_insert->bindValue(':genre_code', $_POST['genre_code'], PDO::PARAM_INT);
 
             // SQL文を実行する
             $stmt_insert->execute();
@@ -41,7 +41,7 @@ if (isset($_POST['submit'])) {
 try {
     $pdo = new PDO($dsn, $user, $password);
 
-    // vendorsテーブルからvendor_codeカラムのデータを取得するためのSQL文を変数$sql_selectに代入する
+    // vendorsテーブルからgenre_codeカラムのデータを取得するためのSQL文を変数$sql_selectに代入する
     $sql_select = 'SELECT genre_code FROM genres';
 
     // SQL文を実行する
@@ -82,11 +82,11 @@ try {
         </div>
         <form action="create.php" method="post" class="registration-form">
             <div>
-                <label for="product_code">書籍コード</label>
-                <input type="number" name="product_code" min="0" max="100000000" required>
+                <label for="book_code">書籍コード</label>
+                <input type="number" name="book_code" min="0" max="100000000" required>
 
-                <label for="product_name">書籍名</label>
-                <input type="text" name="product_name" maxlength="50" required>
+                <label for="book_name">書籍名</label>
+                <input type="text" name="book_name" maxlength="50" required>
 
                 <label for="price">単価</label>
                 <input type="number" name="price" min="0" max="100000000" required>
@@ -94,13 +94,13 @@ try {
                 <label for="vendor_quantity">在庫数</label>
                 <input type="number" name="stock_quantity" min="0" max="100000000" required>
 
-                <label for="product_code">ジャンルコード</label>
-                <select name="vendor_code" required>
+                <label for="genre_code">ジャンルコード</label>
+                <select name="genre_code" required>
                     <option disabled selected value>選択してください</option>
                     <?php
                     // 配列の中身を順番に取り出し、セレクトボックスの選択肢として出力する
-                    foreach ($vendor_codes as $vendor_code) {
-                        echo "<option value='{$vendor_code}'>{$vendor_code}</option>";
+                    foreach ($genre_codes as $genre_code) {
+                        echo "<option value='{$genre_code}'>{$genre_code}</option>";
                     }
                     ?>
                 </select>
@@ -110,7 +110,7 @@ try {
     </article>
 </main>
 <footer>
-    <p class="copyright">&copy; 商品管理アプリ All rights reserved.</p>
+    <p class="copyright">&copy; 書籍管理アプリ All rights reserved.</p>
 </footer>
 </body>
 </html>
